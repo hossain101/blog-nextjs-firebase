@@ -1,17 +1,15 @@
 import UserPostListView from "@/components/Posts/UserPostListView";
-
+import React from "react";
 
 export default function Home() {
   return (
-  <main>
-    <h1>
-      
-      HOZENX BLOG
-    </h1>
-    <p>
-      Welcome to the Hozenx Blog. Here you will find the latest news, tips, and tricks for all things tech.
-    </p>
-    <UserPostListView />
-  </main>
+    <main>
+      <h1>HOZENX BLOG</h1>
+      <p>
+        Welcome to the Hozenx Blog. Here you will find the latest news, tips,
+        and tricks for all things tech.
+      </p>
+      <UserPostListView />
+    </main>
   );
 }
