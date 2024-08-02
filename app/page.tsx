@@ -1,9 +1,17 @@
-import React from 'react'
+import UserPostListView from "@/components/Posts/UserPostListView";
 
-const page = () => {
+
+export default function Home() {
   return (
-    <div>page</div>
-  )
+  <main>
+    <h1>
+      
+      HOZENX BLOG
+    </h1>
+    <p>
+      Welcome to the Hozenx Blog. Here you will find the latest news, tips, and tricks for all things tech.
+    </p>
+    <UserPostListView />
+  </main>
+  );
 }
-
-export default page
