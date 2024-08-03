@@ -1,23 +1,13 @@
-"use client";
-import React, {
-  createContext,
-  ReactNode,
-  useContext,
-  useState,
-  Suspense,
-} from "react";
-import {
-  createNewAuthor,
-  deleteAuthor,
-  updateAuthor,
-} from "../firebase/author/write";
+
+import React, { createContext, ReactNode, useContext, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { createNewAuthor, deleteAuthor, updateAuthor } from "../firebase/author/write";
 import { getAuthor } from "../firebase/author/read";
 
 export interface AuthorFormContextType {
   data: Record<string, string>;
   isLoading: boolean;
-  error: null | string; // Adjust according to your error handling strategy
+  error: null | string;
   handleCreate: () => Promise<void>;
   handleData: (key: string, value: string) => void;
   image: File | null;
@@ -29,22 +19,18 @@ export interface AuthorFormContextType {
   handleDelete: (id: string) => Promise<void>;
 }
 
-const AuthorFormContext = createContext<AuthorFormContextType | undefined>(
-  undefined
-);
+const AuthorFormContext = createContext<AuthorFormContextType | undefined>(undefined);
 
 const AuthorFormContextProvider = ({ children }: { children: ReactNode }) => {
-  //router
   const router = useRouter();
-  //use states
   const searchParams = useSearchParams();
   const updateAuthorId = searchParams.get("id");
 
-  const [data, setData] = useState({});
+  const [data, setData] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
   const [isDone, setIsDone] = useState(false);
-  const [error, setError] = React.useState<null | string>(null);
-  const [image, setImage] = React.useState<File | null>(null);
+  const [error, setError] = useState<null | string>(null);
+  const [image, setImage] = useState<File | null>(null);
 
   const handleData = (key: string, value: string) => {
     setIsDone(false);
@@ -54,35 +40,33 @@ const AuthorFormContextProvider = ({ children }: { children: ReactNode }) => {
   const handleCreate = async () => {
     setIsLoading(true);
     try {
-      await createNewAuthor(data!, image!);
+      if (!data || !image) {
+        throw new Error("Data or image is missing");
+      }
+      await createNewAuthor(data, image);
       setIsDone(true);
     } catch (error) {
-      if (error instanceof Error) {
-        setError(error.message);
-      } else {
-        // Handle cases where error is not an instance of Error
-        setError("An unknown error occurred");
-      }
+      setError(error instanceof Error ? error.message : "An unknown error occurred");
     } finally {
       setIsLoading(false);
     }
   };
+
   const handleUpdate = async () => {
     setIsLoading(true);
     try {
-      await updateAuthor(data!, image!);
+      if (!data || !image) {
+        throw new Error("Data or image is missing");
+      }
+      await updateAuthor(data, image);
       setIsDone(true);
     } catch (error) {
-      if (error instanceof Error) {
-        setError(error.message);
-      } else {
-        // Handle cases where error is not an instance of Error
-        setError("An unknown error occurred");
-      }
+      setError(error instanceof Error ? error.message : "An unknown error occurred");
     } finally {
       setIsLoading(false);
     }
   };
+
   const handleDelete = async (id: string) => {
     setIsLoading(true);
     try {
@@ -90,12 +74,7 @@ const AuthorFormContextProvider = ({ children }: { children: ReactNode }) => {
       setIsDone(true);
       router.push("/admin/authors");
     } catch (error) {
-      if (error instanceof Error) {
-        setError(error.message);
-      } else {
-        // Handle cases where error is not an instance of Error
-        setError("An unknown error occurred");
-      }
+      setError(error instanceof Error ? error.message : "An unknown error occurred");
     } finally {
       setIsLoading(false);
     }
@@ -109,12 +88,7 @@ const AuthorFormContextProvider = ({ children }: { children: ReactNode }) => {
         setData(response.data());
       }
     } catch (error) {
-      if (error instanceof Error) {
-        setError(error.message);
-      } else {
-        // Handle cases where error is not an instance of Error
-        setError("An unknown error occurred");
-      }
+      setError(error instanceof Error ? error.message : "An unknown error occurred");
     } finally {
       setIsLoading(false);
     }
@@ -137,7 +111,7 @@ const AuthorFormContextProvider = ({ children }: { children: ReactNode }) => {
         handleDelete,
       }}
     >
-      <Suspense>{children}</Suspense>
+      {children}
     </AuthorFormContext.Provider>
   );
 };
