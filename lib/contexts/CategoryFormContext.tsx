@@ -1,17 +1,13 @@
-"use client";
-import React, { createContext, ReactNode, Suspense, useContext, useState } from "react";
-import {
-  createNewCategory,
-  deleteCategory,
-  updateCategory,
-} from "../firebase/category/write";
+
+import React, { createContext, ReactNode, useContext, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { createNewCategory, deleteCategory, updateCategory } from "../firebase/category/write";
 import { getCategory } from "../firebase/category/read";
 
 export interface CategoryFormContextType {
   data: Record<string, string>;
   isLoading: boolean;
-  error: null | string; // Adjust according to your error handling strategy
+  error: null | string;
   handleCreate: () => Promise<void>;
   handleData: (key: string, value: string) => void;
   image: File | null;
@@ -23,22 +19,18 @@ export interface CategoryFormContextType {
   handleDelete: (id: string) => Promise<void>;
 }
 
-const CategoryFormContext = createContext<CategoryFormContextType | undefined>(
-  undefined
-);
+const CategoryFormContext = createContext<CategoryFormContextType | undefined>(undefined);
 
 const CategoryFormContextProvider = ({ children }: { children: ReactNode }) => {
-  //router
   const router = useRouter();
-  //use states
   const searchParams = useSearchParams();
   const updateCategoryId = searchParams.get("id");
 
-  const [data, setData] = useState({});
+  const [data, setData] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
   const [isDone, setIsDone] = useState(false);
-  const [error, setError] = React.useState<null | string>(null);
-  const [image, setImage] = React.useState<File | null>(null);
+  const [error, setError] = useState<null | string>(null);
+  const [image, setImage] = useState<File | null>(null);
 
   const handleData = (key: string, value: string) => {
     setIsDone(false);
@@ -48,35 +40,33 @@ const CategoryFormContextProvider = ({ children }: { children: ReactNode }) => {
   const handleCreate = async () => {
     setIsLoading(true);
     try {
-      await createNewCategory(data!, image!);
+      if (!data || !image) {
+        throw new Error("Data or image is missing");
+      }
+      await createNewCategory(data, image);
       setIsDone(true);
     } catch (error) {
-      if (error instanceof Error) {
-        setError(error.message);
-      } else {
-        // Handle cases where error is not an instance of Error
-        setError("An unknown error occurred");
-      }
+      setError(error instanceof Error ? error.message : "An unknown error occurred");
     } finally {
       setIsLoading(false);
     }
   };
+
   const handleUpdate = async () => {
     setIsLoading(true);
     try {
-      await updateCategory(data!, image!);
+      if (!data || !image) {
+        throw new Error("Data or image is missing");
+      }
+      await updateCategory(data, image);
       setIsDone(true);
     } catch (error) {
-      if (error instanceof Error) {
-        setError(error.message);
-      } else {
-        // Handle cases where error is not an instance of Error
-        setError("An unknown error occurred");
-      }
+      setError(error instanceof Error ? error.message : "An unknown error occurred");
     } finally {
       setIsLoading(false);
     }
   };
+
   const handleDelete = async (id: string) => {
     setIsLoading(true);
     try {
@@ -84,12 +74,7 @@ const CategoryFormContextProvider = ({ children }: { children: ReactNode }) => {
       setIsDone(true);
       router.push("/admin/categories");
     } catch (error) {
-      if (error instanceof Error) {
-        setError(error.message);
-      } else {
-        // Handle cases where error is not an instance of Error
-        setError("An unknown error occurred");
-      }
+      setError(error instanceof Error ? error.message : "An unknown error occurred");
     } finally {
       setIsLoading(false);
     }
@@ -103,12 +88,7 @@ const CategoryFormContextProvider = ({ children }: { children: ReactNode }) => {
         setData(response.data());
       }
     } catch (error) {
-      if (error instanceof Error) {
-        setError(error.message);
-      } else {
-        // Handle cases where error is not an instance of Error
-        setError("An unknown error occurred");
-      }
+      setError(error instanceof Error ? error.message : "An unknown error occurred");
     } finally {
       setIsLoading(false);
     }
@@ -131,7 +111,7 @@ const CategoryFormContextProvider = ({ children }: { children: ReactNode }) => {
         handleDelete,
       }}
     >
-      <Suspense>{children}</Suspense>
+      {children}
     </CategoryFormContext.Provider>
   );
 };
