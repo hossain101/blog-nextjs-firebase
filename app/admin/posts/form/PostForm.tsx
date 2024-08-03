@@ -29,7 +29,7 @@ const PostForm = () => {
     if (updatePostId) {
       fetchData!(updatePostId);
     }
-  }, [fetchData, updatePostId]);
+  }, []);
 
   return (
     

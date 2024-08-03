@@ -24,7 +24,7 @@ const CategoryForm = () => {
     if (updateCategoryId) {
       fetchData!(updateCategoryId);
     }
-  }, [fetchData, updateCategoryId]);
+  }, []);
 
   return (
     <main className="p-6 w-full flex flex-col gap-5">

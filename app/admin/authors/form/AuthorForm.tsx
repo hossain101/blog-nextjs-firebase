@@ -23,7 +23,7 @@ const AuthorForm = () => {
     if (updateAuthorId) {
       fetchData!(updateAuthorId);
     }
-  }, [fetchData, updateAuthorId]);
+  }, []);
 
   return (
     <main className="p-6 w-full flex flex-col gap-5">
