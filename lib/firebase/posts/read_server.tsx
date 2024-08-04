@@ -22,11 +22,13 @@ export const getAllPostsWithCategory = async (
   try {
     const categoryQuery = query(
       collection(db, "posts"),
-      where("category", "==", categoryId)
+      where("categoryId", "==", categoryId)
     );
 
     const querySnapshot = await getDocs(categoryQuery);
-    const data = querySnapshot.docs.map((doc) => doc.data());
+    const data = querySnapshot.docs.map((doc) => {
+      return { id: doc.id, ...doc.data() };
+    });
     return data;
   } catch (error) {
     console.error("Error fetching posts:", error);
