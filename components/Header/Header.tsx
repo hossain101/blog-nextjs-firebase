@@ -13,17 +13,23 @@ const Header = () => {
       </Link>
       <ul className="flex space-x-5">
         <li className="flex items-center gap-2">
-          <House />
-          <Link href="#">Home</Link>
+          <Link href="/">
+            <House />
+            Home
+          </Link>
         </li>
-        
+
         <li className="flex items-center gap-2">
-          <Newspaper />
-          <Link href="#">Categories</Link>
+          <Link href="/categories">
+            <Newspaper />
+            Categories
+          </Link>
         </li>
         <li className="flex items-center gap-2">
-          <MessageCircleMore />
-          <Link href="#">Contact</Link>
+          <Link href="/contact">
+            <MessageCircleMore />
+            Contact
+          </Link>
         </li>
       </ul>
       <AuthContextProvider>

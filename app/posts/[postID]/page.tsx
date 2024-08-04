@@ -8,7 +8,7 @@ const page = async ({ params }: { params: { postID: string } }) => {
   const post = await getPost(params.postID);
 
   if (!post) {
-    return <div>Loading...</div>; // Or any other loading state representation
+    return <div>No Data</div>; // Or any other loading state representation
   }
 
   return (
