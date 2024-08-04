@@ -1,24 +1,17 @@
-import { getAllPosts } from "@/lib/firebase/posts/read_server";
+import PostCard from "@/components/Posts/PostCard";
+import { getAllPostsWithCategory } from "@/lib/firebase/posts/read_server";
 import React from "react";
-import PostCard from "./PostCard";
 
-const UserPostListView = async () => {
-  const posts = await getAllPosts();
-
-  if (!posts) {
-    return <div>No data</div>;
-  }
-
+const page = async ({ params }: { params: { categoryID: string } }) => {
+  const { categoryID } = params;
+  const posts = await getAllPostsWithCategory(categoryID);
   return (
-    <section className="p-10">
+    <main>
+      <h1>Category: {categoryID}</h1>
       <div className="grid grid-cols-4 gap-5 border">
         {posts.map((post: Record<string, string>, index: number) => (
-          <div key={post.id}>
-            {
-              post.id
-            }
           <PostCard
-            
+            key={post.id}
             Timestamp={post.Timestamp}
             authorId={post.authorId}
             content={post.content}
@@ -26,13 +19,11 @@ const UserPostListView = async () => {
             postImageUrl={post.postImageUrl}
             categoryId={post.categoryId}
             postID={post.id}
-            
-            />
-            </div>
+          />
         ))}
       </div>
-    </section>
+    </main>
   );
 };
 
-export default UserPostListView;
+export default page;

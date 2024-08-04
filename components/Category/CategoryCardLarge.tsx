@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 const CategoryCardLarge = ({
@@ -7,7 +8,8 @@ const CategoryCardLarge = ({
   category: Record<string, string>;
 }) => {
   return (
-    <div className="">
+    <Link href={`/categories/${category?.id}`}>
+    <div className="flex flex-col items-center justify-center gap-2 rounded-xl  hover:bg-slate-600 ">
       <Image
         src={category?.iconUrl}
         alt="category-image"
@@ -17,6 +19,7 @@ const CategoryCardLarge = ({
       />
       <h1>{category?.name}</h1>
     </div>
+    </Link>
   );
 };
 
