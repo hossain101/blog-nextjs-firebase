@@ -4,6 +4,42 @@ import { getPost } from "@/lib/firebase/posts/read_server";
 import Image from "next/image";
 import React from "react";
 
+
+
+
+
+
+ 
+import type { Metadata, ResolvingMetadata } from 'next'
+ 
+type Props = {
+  params: { id: string }
+  searchParams: { [key: string]: string | string[] | undefined }
+}
+ 
+export async function generateMetadata({ params }: { params: { postID: string } }
+): Promise<Metadata> {
+  // read route params
+  const id = params.postID
+ 
+  // fetch data
+  const post = await getPost(params.postID);
+ 
+  // optionally access and extend (rather than replace) parent metadata
+  
+ 
+  return {
+    title: id,
+    openGraph: {
+      images: [post?.postImageUrl],
+    },
+  }
+}
+
+
+
+
+
 const page = async ({ params }: { params: { postID: string } }) => {
   const post = await getPost(params.postID);
 
