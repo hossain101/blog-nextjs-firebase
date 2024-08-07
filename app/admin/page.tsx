@@ -1,11 +1,16 @@
 import CountCard from "@/components/CountCard";
-import { StickyNote } from "lucide-react";
+import { List, PersonStanding, StickyNote } from "lucide-react";
 import React from "react";
 
 const page = () => {
   return (
-    <main>
-      <CountCard icon={<StickyNote />} name="post" path="post" />
+    <main className="p-10">
+      <div className="flex gap-4">
+
+      <CountCard icon={<StickyNote />} name="Post" path="posts" />
+      <CountCard icon={<PersonStanding />} name="Authors" path="authors" />
+      <CountCard icon={<List />} name="Categories" path="categories" />
+      </div>
     </main>
   );
 };
