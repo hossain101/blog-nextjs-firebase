@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import Sidebar from "@/components/AdminComponents/Sidebar";
 import AuthContextProvider, { useAuth } from "@/lib/contexts/AuthContext";
 import { useAdmin } from "@/lib/firebase/admin/read";
@@ -10,22 +10,14 @@ const Layout = ({
 }: Readonly<{
   children: React.ReactNode;
 }>) => {
-
-  
-
-
   return (
     <>
       <AuthContextProvider>
-      
         <InnerLayout>{children}</InnerLayout>
-          
-      
       </AuthContextProvider>
     </>
   );
 };
-
 
 const InnerLayout = ({
   children,
@@ -38,9 +30,6 @@ const InnerLayout = ({
   const authIsLoading = authContext?.isLoading;
   const { data: adminData, isLoading, error } = useAdmin({ uid: admin?.uid! });
 
- 
-
-
   if (authIsLoading || isLoading) {
     return <div>Loading...</div>;
   }
@@ -49,13 +38,14 @@ const InnerLayout = ({
     return <div>Error: {error.message}</div>;
   }
 
-
+  if (!adminData) {
+    return <div>Unauthorized</div>;
+  }
   return (
-    
     <section className="flex">
-    <Sidebar />
-    {children}
-  </section>
+      <Sidebar />
+      {children}
+    </section>
   );
 };
 

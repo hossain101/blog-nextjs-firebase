@@ -4,7 +4,7 @@ import useSWRSubscription from "swr/subscription";
 
 export function useAdmin({ uid }: { uid: string }) {
   const { data, error } = useSWRSubscription(
-    [`admins/&+${uid}`],
+    [`admins/${uid}`],
     ([path], { next }) => {
       const ref = doc(db, path);
 
