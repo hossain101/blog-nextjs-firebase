@@ -18,7 +18,7 @@ interface PostData {
 const PostCard = ({
   postID,
   title,
-  content,
+  
   postImageUrl,
   Timestamp,
   authorId,
